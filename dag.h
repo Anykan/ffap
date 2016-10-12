@@ -15,6 +15,7 @@ int TopSort ( int anzahlKnoten, int ** AdjMat, int ** Kantengewicht, int * Einga
 			if ( Eingangsgrad[ i ] == 0 ){
 				anzahlDerKnotenInTopSort++;
 				TopologischeSortierung[ anzahlDerKnotenInTopSort ] = i;	
+				Eingangsgrad[i]=(-1);
 				knoten=i;
 				break;
 			}
@@ -25,9 +26,9 @@ int TopSort ( int anzahlKnoten, int ** AdjMat, int ** Kantengewicht, int * Einga
 			break;
 		}
 		for ( j = 1; j <= AdjMat[knoten][0]; j++ ){
-			Eingangsgrad[knoten]=(-1);
 			Eingangsgrad[ AdjMat[knoten][j] ]--;
 		}
+		
 	}while (anzahlDerKnotenInTopSort<anzahlKnoten);
 	
 	return 0;
@@ -35,14 +36,12 @@ int TopSort ( int anzahlKnoten, int ** AdjMat, int ** Kantengewicht, int * Einga
 
 int DAG ( int anzahlKnoten, int ** AdjMat, int ** Kantengewicht, int * Eingangsgrad, int startKnoten, int zielKnoten, int * Vorgaenger, int * WeglaengeZuKnoten, int printDetails )
 {
-	int i, j, k;
-
+	int i, j, k, ii;
 	int * TopologischeSortierung;	//entspricht Vektor t im Quellcode auf Vorlesungsfolien
 	TopologischeSortierung = GenerateIntVect ( anzahlKnoten+1 );
 
 	TopSort ( anzahlKnoten, AdjMat, Kantengewicht, Eingangsgrad, TopologischeSortierung );
-	ShowIntVect ( 1, 30, TopologischeSortierung, "TopologischeSortierung" );	
-	
+//	ShowIntVect ( 270, 300, TopologischeSortierung, "TopologischeSortierung" );	
 	for (j=1;j<=anzahlKnoten;j++){
 		WeglaengeZuKnoten[j]=MAX;
 		Vorgaenger[j]=MAX;
@@ -52,7 +51,7 @@ int DAG ( int anzahlKnoten, int ** AdjMat, int ** Kantengewicht, int * Eingangsg
 	}
 	WeglaengeZuKnoten[startKnoten]=0;
 	Vorgaenger[startKnoten]=0;
-	
+
 	for(i;i<=anzahlKnoten;i++){
 		if(WeglaengeZuKnoten[TopologischeSortierung[i]]<MAX){
 			for(k=1;k<=AdjMat[TopologischeSortierung[i]][0];k++){
@@ -100,7 +99,7 @@ int ShowShortestPath ( int anzahlKnoten, int ** AdjMat, int startKnoten, int zie
 	}
 	else
 	{
-//		printf ( "\nEs exisitiert kein Weg von Startknoten %d zu Zielknoten %d!\n", startKnoten, zielKnoten );
+		printf ( "\nEs exisitiert kein Weg von Startknoten %d zu Zielknoten %d!\n", startKnoten, zielKnoten );
 	}
 
 	return 1;
